@@ -1,0 +1,10 @@
+body { font-family: sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+.filters { margin-bottom: 1rem; }
+.filters button { padding: 0.5rem 1rem; margin-right: 0.5rem; cursor: pointer; }
+.filters button.is-active { font-weight: bold; border: 2px solid #0056b3; }
+.task-card { border: 1px solid #ccc; padding: 1rem; margin-bottom: 0.5rem; border-radius: 4px; }
+.task-card.is-completed { background-color: #f0fdf4; text-decoration: line-through; }
+.task-actions { margin-top: 0.5rem; }
+.task-actions button { margin-right: 0.5rem; cursor: pointer; }
+.message { color: #d32f2f; font-weight: bold; }
+[hidden] { display: none !important; }
