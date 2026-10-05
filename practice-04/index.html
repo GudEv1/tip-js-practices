@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ПР4: Формы и Хранилище</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <h1 id="page-title">Список задач</h1>
+
+    <form id="task-form" class="task-form">
+      <h2 id="form-title">Добавление задачи</h2>
+      <div class="form-group">
+        <label for="task-id">ID:</label>
+        <input type="number" id="task-id" name="id" min="1" step="1" required>
+      </div>
+      <div class="form-group">
+        <label for="task-title">Название:</label>
+        <input type="text" id="task-title" name="title" maxlength="100" required>
+      </div>
+      <div class="form-group">
+        <label for="task-priority">Приоритет:</label>
+        <select id="task-priority" name="priority" required>
+          <option value="low">Низкий</option>
+          <option value="medium" selected>Средний</option>
+          <option value="high">Высокий</option>
+        </select>
+      </div>
+      <div class="form-actions">
+        <button type="submit" id="submit-btn">Добавить задачу</button>
+        <button type="button" id="cancel-btn" hidden>Отмена</button>
+      </div>
+    </form>
+
+    <div id="task-filters" class="filters">
+      <button type="button" data-filter="all" class="is-active" aria-pressed="true">Все</button>
+      <button type="button" data-filter="pending" aria-pressed="false">В работе</button>
+      <button type="button" data-filter="completed" aria-pressed="false">Выполненные</button>
+    </div>
+
+    <div id="task-summary" class="summary">
+      <p>Всего: <span data-stat="total">0</span></p>
+      <p>Выполнено: <span data-stat="completed">0</span></p>
+      <p>Осталось: <span data-stat="pending">0</span></p>
+      <p>Прогресс: <span data-stat="progress">0.0%</span></p>
+      <p>Показано: <span data-stat="visible">0</span></p>
+    </div>
+
+    <p id="operation-message" class="message" hidden></p>
+    <p id="empty-message" class="message" hidden></p>
+
+    <ul id="task-list"></ul>
+
+    <button type="button" id="reset-storage-btn" class="reset-btn">Сбросить сохранённые данные</button>
+  </main>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
