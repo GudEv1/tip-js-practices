@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Пример форм и localStorage — ПР4</title>
+  <style>body{font:16px system-ui;max-width:680px;margin:2rem auto;padding:1rem}label{display:block;margin:1rem 0}input,button{font:inherit;padding:.5rem}output{display:block;padding:1rem;background:#eee;border-radius:.5rem;margin-top:1rem;white-space:pre-wrap}</style>
+  <script src="./forms-storage.js" type="module"></script>
+</head>
+<body>
+<h1>Формы и хранилище</h1>
+<p>Самостоятельный пример: валидация, FormData, сериализация и восстановление JSON.</p>
+<form id="example-form">
+  <label>Название задачи <input name="title" id="title" required minlength="1" maxlength="100"></label>
+  <label>Приоритет <select name="priority"><option>low</option><option selected>medium</option><option>high</option></select></label>
+  <button type="submit">Сохранить пример</button>
+  <button type="button" id="restore">Восстановить</button>
+  <button type="button" id="clear">Очистить</button>
+</form>
+<output id="result" role="status" aria-live="polite">Введите данные.</output>
+</body>
+</html>

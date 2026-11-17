@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {validateTaskDraft} from '../src/form-validation.js';
+import {isValidTaskList,loadTasks,saveTasks,removeSavedTasks} from '../src/task-storage.js';
+import {demoTasks} from '../src/data.js';
+let n=0;const check=(desc,fn)=>{try{fn();n++;console.log('OK:',desc)}catch(e){console.error('FAIL:',desc,e);process.exitCode=1;}};
+check('Пустое название',()=>{const x=validateTaskDraft({id:'20',title:'   ',priority:'high'},demoTasks);assert.equal(x.ok,false);assert.ok(x.errors.title);});
+check('Повтор id отклоняется',()=>{const x=validateTaskDraft({id:'4',title:'Тест',priority:'low'},demoTasks);assert.equal(x.ok,false);assert.ok(x.errors.id);});
+check('Нормализация корректного черновика',()=>{assert.deepEqual(validateTaskDraft({id:'20',title:'  Тест  ',priority:'high'},demoTasks),{ok:true,value:{id:20,title:'Тест',priority:'high'}});});
+check('Редактирование не использует ввод id',()=>{const x=validateTaskDraft({id:null,title:'Новая',priority:'medium'},demoTasks,1);assert.equal(x.ok,true);assert.equal(x.value.id,1);});
+check('Схема и дубликаты',()=>{assert.equal(isValidTaskList(demoTasks),true);assert.equal(isValidTaskList([...demoTasks,demoTasks[0]]),false);});
+check('Сохранение и загрузка',()=>{const map=new Map(),storage={getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,v),removeItem:k=>map.delete(k)};assert.equal(saveTasks(storage,'test',demoTasks).ok,true);const r=loadTasks(storage,'test',demoTasks);assert.equal(r.source,'storage');r.tasks[0].title='Чужое';assert.equal(demoTasks[0].title,'Изучить функции');assert.equal(removeSavedTasks(storage,'test').ok,true);assert.equal(loadTasks(storage,'test',demoTasks).source,'initial');});
+check('Повреждённый JSON и исключение чтения',()=>{const storage={getItem:()=>'{broken-json'};assert.equal(loadTasks(storage,'bad',demoTasks).source,'fallback');assert.equal(loadTasks({getItem(){throw Error('denied')}},'x',demoTasks).ok,false);});
+console.log(`Дополнительные проверки ПР4: пройдено ${n}, ошибок ${process.exitCode?1:0}`);

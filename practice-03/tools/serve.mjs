@@ -1,0 +1,4 @@
+import {createServer} from 'node:http';import {readFile} from 'node:fs/promises';import {extname,resolve,relative,sep} from 'node:path';
+const port=Number(process.argv[2]??5503);const root=resolve(import.meta.dirname,'..');
+const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8'};
+createServer(async(req,res)=>{let pathname;try{pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);let file=resolve(root,'.'+(pathname==='/'?'/index.html':pathname));if(!file.startsWith(root+sep)&&file!==root)throw Error('outside');const body=await readFile(file);res.writeHead(200,{'Content-Type':mime[extname(file)]??'application/octet-stream','Cache-Control':'no-store'});res.end(body);}catch{res.writeHead(404);res.end('Not found');}}).listen(port,'127.0.0.1',()=>console.log(`3 запущена: http://127.0.0.1:${port}/`));

@@ -1,0 +1,15 @@
+{
+  "name": "tip-js-practices-variant-6",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Практические работы 01–06 по JavaScript, вариант 6",
+  "scripts": {
+    "check:01": "node practice-01/js/hello.js && node practice-01/js/types.js && node practice-01/js/progress.js && node practice-01/js/plan.js && node practice-01/js/debug.js",
+    "check:02": "npm --prefix practice-02 test",
+    "check:03": "npm --prefix practice-03 test",
+    "check:04": "npm --prefix practice-04 test",
+    "check:05": "npm --prefix practice-05 test",
+    "check:06": "npm --prefix practice-06 test",
+    "test": "npm run check:01 && npm run check:02 && npm run check:03 && npm run check:04 && npm run check:05 && npm run check:06"
+  }
+}

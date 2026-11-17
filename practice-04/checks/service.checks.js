@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {demoTasks,variantTasks,variantNumber} from '../src/data.js';
+import * as s from '../src/task-service.js';
+let pass=0;const check=(name,fn)=>{try{fn();pass++;console.log('OK:',name);}catch(e){console.error('FAIL:',name,e);process.exitCode=1;}};
+check('createTask проверка и trim',()=>{assert.equal(s.createTask(20,'  Задача  ','high').task.title,'Задача');assert.equal(s.createTask(0,'Новая').ok,false);assert.equal(s.createTask(2,'  ').ok,false);});
+check('Данные варианта №6',()=>{assert.equal(variantNumber,6);assert.deepEqual(variantTasks.map(x=>x.id),[11,23,37,41,58,64]);assert.equal(s.getTaskStats(variantTasks).completed,5)});
+check('Чтение, фильтр, названия',()=>{assert.equal(s.findTaskById(demoTasks,4).id,4);assert.deepEqual(s.getPendingTasks(demoTasks).map(t=>t.id),[4,7]);assert.equal(s.getTaskTitles(demoTasks).length,4)});
+check('Сводка, пустой список',()=>{assert.deepEqual(s.getTaskStats(demoTasks),{total:4,completed:2,pending:2,progress:50});assert.deepEqual(s.getTaskStats([]),{total:0,completed:0,pending:0,progress:0})});
+check('Неизменяемость операций',()=>{const frozen=Object.freeze(demoTasks.map(t=>Object.freeze({...t})));const a=s.addTask(frozen,20,'Новая');assert.equal(a.ok,true);const b=s.renameTask(a.tasks,4,'Другое');assert.equal(b.tasks[1].title,'Другое');assert.equal(a.tasks[1].title,demoTasks[1].title);const c=s.setTaskCompleted(b.tasks,4,true);assert.equal(c.tasks[1].completed,true);const d=s.removeTask(c.tasks,7);assert.equal(d.tasks.length,4);});
+check('Отклонить повторы и неверные статусы',()=>{assert.equal(s.addTask(demoTasks,4,'Повтор').ok,false);assert.equal(s.setTaskCompleted(demoTasks,4,'true').ok,false);assert.equal(s.removeTask(demoTasks,999).ok,false)});
+check('Редактирование не сбрасывает completed',()=>{const edited=s.updateTask(demoTasks,1,'Новое','high');assert.equal(edited.ok,true);assert.equal(edited.tasks[0].completed,true);assert.equal(demoTasks[0].priority,'medium');});
+console.log(`Проверки ПР2: успешно ${pass}, ошибок ${process.exitCode?1:0}`);
